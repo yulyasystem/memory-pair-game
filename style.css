@@ -1,0 +1,28 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: black;
+    height: 100vh;
+}
+
+.grid {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    margin:  auto;
+    width: 640px;
+    height: 640px;
+}
+
+.memory-card {
+    position:relative;
+}
+
+.front-side,.back-side{
+    background: pink;
+    position:absolute;
+    width: 70%;
+    height: 70%;
+}
