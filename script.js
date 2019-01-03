@@ -21,7 +21,7 @@ function makeCardsArray() {
 }
 
 function createCards() {
-  let fragment = document.createElement('template');
+  let fragment = document.createElement("template");
   cards.forEach(item => {
     let attribute = item.split("/")[1];
     fragment.innerHTML += `<div class="memory-card " data-pair="${attribute}">
@@ -32,31 +32,36 @@ function createCards() {
   grid.appendChild(fragment.content);
 }
 
-function flipCards() {
-  grid.addEventListener("click", function ({ target }) {
-    if (isBlocked) return;
-    let parent = target.parentElement;
-    parent.classList.add("flip");
-    if (!isFlipped) {
-      isFlipped = true;
-      firstCard = parent;
-    } else {
-      isFlipped = false;
-      secondCard = parent;
 
-      if (firstCard.dataset.pair === secondCard.dataset.pair) {
-        deleteEvent(arguments.callee);
-      } else {
-        isBlocked = true;
-        unflip();
-      }
+  grid.addEventListener("click", handleCardClick);
+    
+ 
+
+function handleCardClick({target}){
+  if (isBlocked) return;
+  let closestElement = target.closest(".memory-card");
+  console.log(closestElement);
+  closestElement.classList.add("flip");
+
+  if (!isFlipped) {
+    isFlipped = true;
+    firstCard = closestElement;
+  } else {
+    isFlipped = false;
+    secondCard = closestElement;
+
+    if (firstCard.dataset.pair === secondCard.dataset.pair) {
+      deleteEvent();
+    } else {
+      isBlocked = true;
+      unflip();
     }
-  });
+  }
 }
 
 function deleteEvent(func) {
-  firstCard.removeEventListener("click", func);
-  secondCard.removeEventListener("click", func);
+  firstCard.removeEventListener("click", handleCardClick);
+  secondCard.removeEventListener("click", handleCardClick);
 }
 
 function unflip() {
@@ -70,6 +75,6 @@ function unflip() {
 function playGame() {
   makeCardsArray();
   createCards();
-  flipCards();
+  handleCardClick();
 }
 playGame();
