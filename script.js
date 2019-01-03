@@ -12,10 +12,9 @@ let cards = [];
 let firstCard, secondCard;
 let grid = document.querySelector(".grid");
 
-function shufleCards() {
+function makeCardsArray() {
   data.forEach(item => {
-    cards.push(item);
-    cards.push(item);
+    cards = cards.concat(item, item);
   });
   cards.sort(() => 0.5 - Math.random());
 }
@@ -41,7 +40,6 @@ function createCards() {
 }
 
 function flipCards() {
-  
   grid.addEventListener("click", function(event) {
     if (isBlocked) return;
     let target = event.target;
@@ -53,10 +51,11 @@ function flipCards() {
     } else {
       isFlipped = false;
       secondCard = parent;
-      isBlocked = true;
+
       if (firstCard.getAttribute("pair") === secondCard.getAttribute("pair")) {
         deleteEvent(arguments.callee);
       } else {
+        isBlocked = true;
         unflip();
       }
     }
@@ -68,17 +67,16 @@ function deleteEvent(func) {
   secondCard.removeEventListener("click", func);
 }
 
-function unflip(){
+function unflip() {
   setTimeout(() => {
     firstCard.classList.remove("flip");
     secondCard.classList.remove("flip");
     isBlocked = false;
-
   }, 800);
 }
 
 function playGame() {
-  shufleCards();
+  makeCardsArray();
   createCards();
   flipCards();
 }
