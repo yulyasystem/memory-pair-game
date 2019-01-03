@@ -41,27 +41,25 @@ function createCards() {
 }
 
 function flipCards() {
-  if (isBlocked) return;
+  
   grid.addEventListener("click", function(event) {
-    console.log(arguments.callee);
+    if (isBlocked) return;
     let target = event.target;
     let parent = target.parentElement;
     parent.classList.add("flip");
-
     if (!isFlipped) {
       isFlipped = true;
       firstCard = parent;
     } else {
       isFlipped = false;
       secondCard = parent;
-
+      isBlocked = true;
       if (firstCard.getAttribute("pair") === secondCard.getAttribute("pair")) {
         deleteEvent(arguments.callee);
       } else {
         unflip();
       }
     }
-    checkFlip(parent);
   });
 }
 
@@ -71,17 +69,12 @@ function deleteEvent(func) {
 }
 
 function unflip(){
-  isBlocked = true;
-
   setTimeout(() => {
     firstCard.classList.remove("flip");
     secondCard.classList.remove("flip");
     isBlocked = false;
-  }, 800);
-}
 
-function checkFlip(parent) {
-  console.log(parent);
+  }, 800);
 }
 
 function playGame() {
