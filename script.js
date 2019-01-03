@@ -6,7 +6,7 @@ const data = [
   "img/candies.svg",
   "img/snowman.svg"
 ];
-
+let isFlipped = false;
 let cards = [];
 let grid = document.querySelector(".grid");
 
@@ -20,8 +20,10 @@ function shufleCards() {
 
 function createCards() {
   cards.forEach(item => {
+    let attribute = item.split("/")[1];
     let div = document.createElement("div");
     div.className = "memory-card";
+    div.setAttribute("pair", attribute);
 
     let frontImg = document.createElement("img");
     frontImg.setAttribute("src", item);
@@ -37,17 +39,38 @@ function createCards() {
 }
 
 function flipCards() {
-  grid.addEventListener("click", event => {
+  let firstCard, secondCard;
+
+  grid.addEventListener("click", function(event) {
+    console.log(arguments.callee);
     let target = event.target;
     let parent = target.parentElement;
     parent.classList.toggle("flip");
+    if (!isFlipped) {
+      isFlipped = true;
+      firstCard = parent;
+      console.log(firstCard.getAttribute("pair"));
+    } else {
+      isFlipped = false;
+      secondCard = parent;
+      console.log(secondCard.getAttribute("pair"));
+      
+      if (firstCard.getAttribute("pair") === secondCard.getAttribute("pair")) {
+        firstCard.removeEventListener("click", arguments.callee);
+        secondCard.removeEventListener("click", arguments.callee);
+      } else {
+        setTimeout(() => {
+          firstCard.classList.remove("flip");
+          secondCard.classList.remove("flip");
+        }, 1000);
+      }
+    }
   });
 }
 
-function playGame(){
+function playGame() {
   shufleCards();
   createCards();
   flipCards();
-
 }
 playGame();
